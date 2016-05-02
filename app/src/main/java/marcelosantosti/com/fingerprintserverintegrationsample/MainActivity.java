@@ -37,6 +37,6 @@ public class MainActivity extends AppCompatActivity {
     private void onButtonAddFingerprintClicked() {
 
         FingerprintAuthenticationDialogFragment fingerprintAuthenticationDialogFragment = new FingerprintAuthenticationDialogFragment();
-        fingerprintAuthenticationDialogFragment.show(getFragmentManager(), "tag");
+        fingerprintAuthenticationDialogFragment.show(getSupportFragmentManager(), "tag");
     }
 }
