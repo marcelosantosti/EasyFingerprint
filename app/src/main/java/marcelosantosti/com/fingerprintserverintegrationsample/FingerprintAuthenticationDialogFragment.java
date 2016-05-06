@@ -19,8 +19,12 @@ package marcelosantosti.com.fingerprintserverintegrationsample;
 import android.app.Activity;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
+import android.support.v4.os.CancellationSignal;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +33,19 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
 import java.security.Signature;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.spec.ECGenParameterSpec;
 
 /**
  * A dialog which uses fingerprint APIs to authenticate the user, and falls back to password
@@ -50,6 +65,9 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
     private FingerprintManagerCompat fingerprintManagerCompat;
     private Signature signature;
     private FingerprintManagerCompat.CryptoObject cryptoObject;
+    private KeyStore keyStore;
+    private KeyPairGenerator keyPairGenerator;
+    private CancellationSignal cancellationSignal;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +81,68 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
             fingerprintManagerCompat = FingerprintManagerCompat.from(getContext());
             signature = Signature.getInstance("SHA256withECDSA");
             cryptoObject = new FingerprintManagerCompat.CryptoObject(signature);
+
+            initKeyStore();
+            initSignature();
+
+            fingerprintManagerCompat.authenticate(cryptoObject, 0, cancellationSignal, new FingerprintManagerCompat.AuthenticationCallback() {
+                @Override
+                public void onAuthenticationError(int errMsgId, CharSequence errString) {
+                    super.onAuthenticationError(errMsgId, errString);
+                }
+
+                @Override
+                public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
+                    super.onAuthenticationHelp(helpMsgId, helpString);
+                }
+
+                @Override
+                public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
+                    super.onAuthenticationSucceeded(result);
+                }
+
+                @Override
+                public void onAuthenticationFailed() {
+                    super.onAuthenticationFailed();
+                }
+            }, null);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void initKeyStore() {
+
+        try {
+            keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, "AndroidKeyStore");
+            keyPairGenerator.initialize(
+                    new KeyGenParameterSpec.Builder("Finger",
+                            KeyProperties.PURPOSE_SIGN)
+                            .setDigests(KeyProperties.DIGEST_SHA256)
+                            .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
+                            .setUserAuthenticationRequired(true)
+                            .build());
+            keyPairGenerator.generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchProviderException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean initSignature() {
+        try {
+            keyStore.load(null);
+            PrivateKey key = (PrivateKey) keyStore.getKey("Finger", null);
+            signature.initSign(key);
+            return true;
+        } catch (KeyPermanentlyInvalidatedException e) {
+            return false;
+        } catch (KeyStoreException | CertificateException | UnrecoverableKeyException | IOException
+                | NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Failed to init Cipher", e);
         }
     }
 
