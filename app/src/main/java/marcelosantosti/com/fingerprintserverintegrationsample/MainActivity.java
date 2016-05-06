@@ -1,9 +1,11 @@
 package marcelosantosti.com.fingerprintserverintegrationsample;
 
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +38,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void onButtonAddFingerprintClicked() {
 
-        FingerprintAuthenticationDialogFragment fingerprintAuthenticationDialogFragment = new FingerprintAuthenticationDialogFragment();
-        fingerprintAuthenticationDialogFragment.show(getSupportFragmentManager(), "tag");
+        if (FingerprintManagerCompat.from(this).hasEnrolledFingerprints()) {
+
+            FingerprintAuthenticationDialogFragment fingerprintAuthenticationDialogFragment = new FingerprintAuthenticationDialogFragment();
+            fingerprintAuthenticationDialogFragment.show(getSupportFragmentManager(), "tag");
+        }
+        else {
+
+            Toast.makeText(this,
+                    "Go to 'Settings -> Security -> Fingerprint' and register at least one fingerprint",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 }

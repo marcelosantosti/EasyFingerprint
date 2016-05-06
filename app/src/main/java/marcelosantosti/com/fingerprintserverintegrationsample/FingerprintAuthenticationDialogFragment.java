@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
 
 /**
  * A dialog which uses fingerprint APIs to authenticate the user, and falls back to password
@@ -43,8 +47,9 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
     private TextView mPasswordDescriptionTextView;
     private TextView mNewFingerprintEnrolledTextView;
 
-    private FingerprintManager.CryptoObject mCryptoObject;
-    private MainActivity mActivity;
+    private FingerprintManagerCompat fingerprintManagerCompat;
+    private Signature signature;
+    private FingerprintManagerCompat.CryptoObject cryptoObject;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,8 +59,13 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
         setRetainInstance(true);
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog);
 
-        // We register a new user account here. Real apps should do this with proper UIs.
-        //enroll();
+        try {
+            fingerprintManagerCompat = FingerprintManagerCompat.from(getContext());
+            signature = Signature.getInstance("SHA256withECDSA");
+            cryptoObject = new FingerprintManagerCompat.CryptoObject(signature);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -104,6 +114,6 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mActivity = (MainActivity) activity;
+        //mActivity = (MainActivity) activity;
     }
 }
