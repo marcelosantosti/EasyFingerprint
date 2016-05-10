@@ -42,7 +42,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.Signature;
+import java.security.SignatureException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.ECGenParameterSpec;
@@ -99,6 +101,19 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
                 @Override
                 public void onAuthenticationSucceeded(FingerprintManagerCompat.AuthenticationResult result) {
                     super.onAuthenticationSucceeded(result);
+
+                    try {
+                        Signature signature = result.getCryptoObject().getSignature();
+
+                        User user = new User();
+                        user.setUsername("mlsantos");
+                        user.setNonce(new SecureRandom().nextLong());
+
+                        signature.update(user.toByteArray());
+                    } catch (SignatureException e) {
+
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
@@ -123,11 +138,14 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
                             .setUserAuthenticationRequired(true)
                             .build());
             keyPairGenerator.generateKeyPair();
+            keyStore = KeyStore.getInstance("AndroidKeyStore");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchProviderException e) {
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
             e.printStackTrace();
         }
     }
