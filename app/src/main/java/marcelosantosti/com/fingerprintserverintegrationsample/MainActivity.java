@@ -3,9 +3,15 @@ package marcelosantosti.com.fingerprintserverintegrationsample;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.marcelosantosti.fingerprintdialog.FingerprintAuthenticationDialogFragment;
+import com.marcelosantosti.fingerprintdialog.FingerprintCallback;
+
+import java.security.Signature;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,13 +47,49 @@ public class MainActivity extends AppCompatActivity {
         if (FingerprintManagerCompat.from(this).hasEnrolledFingerprints()) {
 
             FingerprintAuthenticationDialogFragment fingerprintAuthenticationDialogFragment = new FingerprintAuthenticationDialogFragment();
+            fingerprintAuthenticationDialogFragment.setFingerprintCallback(new FingerprintCallback() {
+                @Override
+                public void onAuthenticated(Signature signature) {
+
+                    onFingerprintAuthenticated(signature);
+                }
+
+                @Override
+                public void onError(Integer errorCode, String errorMessage) {
+
+                    onFingerprintError(errorCode, errorMessage);
+                }
+            });
             fingerprintAuthenticationDialogFragment.show(getSupportFragmentManager(), "tag");
         }
         else {
 
-            Toast.makeText(this,
-                    "Go to 'Settings -> Security -> Fingerprint' and register at least one fingerprint",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.register_at_least_one_fingerprint), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void onFingerprintAuthenticated(Signature signature) {
+
+        try {
+
+            //send registration to a server
+            String teste = "";
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    private void onFingerprintError(int errorCode, String errorMessage) {
+
+        try {
+
+            Log.e("FingerprintSample", errorCode + " - " + errorMessage);
+        }
+        catch (Exception e) {
+
+
         }
     }
 }
