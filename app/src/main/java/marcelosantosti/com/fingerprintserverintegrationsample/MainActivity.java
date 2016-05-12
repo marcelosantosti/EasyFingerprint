@@ -10,12 +10,15 @@ import android.widget.Toast;
 
 import com.marcelosantosti.fingerprintdialog.FingerprintAuthenticationDialogFragment;
 import com.marcelosantosti.fingerprintdialog.FingerprintCallback;
+import com.marcelosantosti.fingerprintdialog.FingerprintUtils;
 
 import java.security.Signature;
+import java.security.SignatureException;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button buttonAddFingerprint;
+    private Button buttonValidateFingerprint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
 
         this.buttonAddFingerprint = (Button)super.findViewById(R.id.buttonAddFingerprint);
+        this.buttonValidateFingerprint = (Button)super.findViewById(R.id.buttonValidateFingerprint);
     }
 
     private void initListeners() {
@@ -38,6 +42,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 onButtonAddFingerprintClicked();
+            }
+        });
+
+        this.buttonValidateFingerprint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onButtonValidateFingerprintClicked();
             }
         });
     }
@@ -68,12 +80,45 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void onButtonValidateFingerprintClicked() {
+
+        FingerprintAuthenticationDialogFragment fingerprintAuthenticationDialogFragment = new FingerprintAuthenticationDialogFragment();
+        fingerprintAuthenticationDialogFragment.setFingerprintCallback(new FingerprintCallback() {
+            @Override
+            public void onAuthenticated(Signature signature) {
+
+                //onFingerprintAuthenticated(signature);
+
+                try {
+                    boolean validate = FingerprintUtils.validateFingerprintPublicKey(signature, getApplicationContext());
+
+                    if (validate)
+                        Toast.makeText(getApplicationContext(), "Digital Válida", Toast.LENGTH_LONG).show();
+                    else
+                        Toast.makeText(getApplicationContext(), "Digital inválida", Toast.LENGTH_LONG).show();
+
+                } catch (SignatureException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Integer errorCode, String errorMessage) {
+
+                onFingerprintError(errorCode, errorMessage);
+            }
+        });
+        fingerprintAuthenticationDialogFragment.show(getSupportFragmentManager(), "tag");
+    }
+
     private void onFingerprintAuthenticated(Signature signature) {
 
         try {
 
             Toast.makeText(this, "Usuário Autenticado", Toast.LENGTH_LONG).show();
             String teste = "";
+
+            FingerprintUtils.saveFingerprintPublicKey(signature, this);
         }
         catch (Exception e) {
 

@@ -36,4 +36,10 @@
         android:layout_height="wrap_content"
         android:text="Cadastrar"/>
 
+    <Button
+        android:id="@+id/buttonValidateFingerprint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Validar"/>
+
 </LinearLayout>
