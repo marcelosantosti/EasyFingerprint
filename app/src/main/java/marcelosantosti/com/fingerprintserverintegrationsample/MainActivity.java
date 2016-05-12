@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-            //send registration to a server
+            Toast.makeText(this, "Usuário Autenticado", Toast.LENGTH_LONG).show();
             String teste = "";
         }
         catch (Exception e) {
@@ -81,9 +81,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void onFingerprintError(int errorCode, String errorMessage) {
+    private void onFingerprintError(Integer errorCode, String errorMessage) {
 
         try {
+
+            Toast.makeText(this, "Usuário Não Autenticado", Toast.LENGTH_LONG).show();
 
             Log.e("FingerprintSample", errorCode + " - " + errorMessage);
         }

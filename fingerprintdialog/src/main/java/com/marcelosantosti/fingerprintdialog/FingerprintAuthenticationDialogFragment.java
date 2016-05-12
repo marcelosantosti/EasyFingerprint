@@ -116,13 +116,8 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
     private void onFingerprintAuthenticated(FingerprintManagerCompat.AuthenticationResult result) {
 
         try {
-            Signature signature = result.getCryptoObject().getSignature();
-//
-//            User user = new User();
-//            user.setUsername("mlsantos");
-//            user.setNonce(new SecureRandom().nextLong());
 
-            //signature.update(user.toByteArray());
+            Signature signature = result.getCryptoObject().getSignature();
 
             if (fingerprintCallback != null)
                 fingerprintCallback.onAuthenticated(signature);
