@@ -11,17 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.io.IOException;
+import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.Signature;
+import java.security.cert.CertificateException;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.X509EncodedKeySpec;
 
 public class FingerprintAuthenticationDialogFragment extends DialogFragment {
 
     private static final String KEY_STORE_NAME = "AndroidKeyStore";
     private static final String KEY_ALIAS = "Finger";
     private static final String CRYPTO_ALGORITHYM = "SHA256withECDSA";
+    private static final String PUBLIC_KEY_NAME = "PUBLIC_KEY";
 
     private Button mCancelButton;
 
@@ -120,7 +128,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
             Signature signature = result.getCryptoObject().getSignature();
 
             if (fingerprintCallback != null)
-                fingerprintCallback.onAuthenticated(signature);
+                fingerprintCallback.onAuthenticated(signature, getPublicKey());
 
             dismiss();
         } catch (Exception e) {
@@ -143,6 +151,18 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
         PrivateKey key = (PrivateKey) keyStore.getKey(FingerprintAuthenticationDialogFragment.KEY_ALIAS, null);
         signature.initSign(key);
         return true;
+    }
+
+    private PublicKey getPublicKey() throws Exception {
+
+        KeyStore keyStore = KeyStore.getInstance(KEY_STORE_NAME);
+        keyStore.load(null);
+        PublicKey publicKey = keyStore.getCertificate(PUBLIC_KEY_NAME).getPublicKey();
+        KeyFactory factory = KeyFactory.getInstance(publicKey.getAlgorithm());
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(publicKey.getEncoded());
+        PublicKey verificationKey = factory.generatePublic(spec);
+
+        return verificationKey;
     }
 
     public FingerprintCallback getFingerprintCallback() {

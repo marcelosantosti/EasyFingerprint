@@ -1,5 +1,6 @@
 package com.marcelosantosti.fingerprintdialog;
 
+import java.security.PublicKey;
 import java.security.Signature;
 
 /**
@@ -7,6 +8,6 @@ import java.security.Signature;
  */
 public interface FingerprintCallback {
 
-    void onAuthenticated(Signature signature);
+    void onAuthenticated(Signature signature, PublicKey publicKey);
     void onError(Integer errorCode, String errorMessage);
 }

@@ -12,6 +12,7 @@ import com.marcelosantosti.fingerprintdialog.FingerprintAuthenticationDialogFrag
 import com.marcelosantosti.fingerprintdialog.FingerprintCallback;
 import com.marcelosantosti.fingerprintdialog.FingerprintUtils;
 
+import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
 
@@ -61,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             FingerprintAuthenticationDialogFragment fingerprintAuthenticationDialogFragment = new FingerprintAuthenticationDialogFragment();
             fingerprintAuthenticationDialogFragment.setFingerprintCallback(new FingerprintCallback() {
                 @Override
-                public void onAuthenticated(Signature signature) {
+                public void onAuthenticated(Signature signature, PublicKey publicKey) {
 
-                    onFingerprintAuthenticated(signature);
+                    onFingerprintAuthenticated(signature, publicKey);
                 }
 
                 @Override
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         FingerprintAuthenticationDialogFragment fingerprintAuthenticationDialogFragment = new FingerprintAuthenticationDialogFragment();
         fingerprintAuthenticationDialogFragment.setFingerprintCallback(new FingerprintCallback() {
             @Override
-            public void onAuthenticated(Signature signature) {
+            public void onAuthenticated(Signature signature, PublicKey publicKey) {
 
                 //onFingerprintAuthenticated(signature);
 
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         fingerprintAuthenticationDialogFragment.show(getSupportFragmentManager(), "tag");
     }
 
-    private void onFingerprintAuthenticated(Signature signature) {
+    private void onFingerprintAuthenticated(Signature signature, PublicKey publicKey) {
 
         try {
 
