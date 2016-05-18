@@ -1,4 +1,4 @@
-package marcelosantosti.com.fingerprintserverintegrationsample;
+package marcelosantosti.com.easyfingerprintsample;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

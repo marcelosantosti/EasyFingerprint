@@ -1,4 +1,4 @@
-package marcelosantosti.com.fingerprintserverintegrationsample;
+package marcelosantosti.com.easyfingerprintsample;
 
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 //onFingerprintAuthenticated(signature);
 
                 try {
-                    boolean validate = FingerprintUtils.validateFingerprintPublicKey(signature, getApplicationContext());
+                    boolean validate = FingerprintUtils.validateFingerprintPublicKey(publicKey, getApplicationContext());
 
                     if (validate)
                         Toast.makeText(getApplicationContext(), "Digital Válida", Toast.LENGTH_LONG).show();
@@ -118,8 +118,10 @@ public class MainActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Usuário Autenticado", Toast.LENGTH_LONG).show();
             String teste = "";
+            publicKey.getEncoded();
 
-            FingerprintUtils.saveFingerprintPublicKey(signature, this);
+            //FingerprintUtils.saveFingerprintPublicKey(signature, this);
+            FingerprintUtils.saveFingerprintPublicKey(publicKey, this);
         }
         catch (Exception e) {
 

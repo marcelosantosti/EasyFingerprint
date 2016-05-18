@@ -29,7 +29,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
     private static final String KEY_STORE_NAME = "AndroidKeyStore";
     private static final String KEY_ALIAS = "Finger";
     private static final String CRYPTO_ALGORITHYM = "SHA256withECDSA";
-    private static final String PUBLIC_KEY_NAME = "PUBLIC_KEY";
+    private static final String GEN_PARAMETER_SPEC = "secp256r1";
 
     private Button mCancelButton;
 
@@ -140,7 +140,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
     private void initKeyStore() throws Exception {
 
         keyPairGenerator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_EC, FingerprintAuthenticationDialogFragment.KEY_STORE_NAME);
-        keyPairGenerator.initialize(new KeyGenParameterSpec.Builder(FingerprintAuthenticationDialogFragment.KEY_ALIAS, KeyProperties.PURPOSE_SIGN).setDigests(KeyProperties.DIGEST_SHA256).setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1")).setUserAuthenticationRequired(true).build());
+        keyPairGenerator.initialize(new KeyGenParameterSpec.Builder(FingerprintAuthenticationDialogFragment.KEY_ALIAS, KeyProperties.PURPOSE_SIGN).setDigests(KeyProperties.DIGEST_SHA256).setAlgorithmParameterSpec(new ECGenParameterSpec(GEN_PARAMETER_SPEC)).setUserAuthenticationRequired(true).build());
         keyPairGenerator.generateKeyPair();
         keyStore = KeyStore.getInstance(FingerprintAuthenticationDialogFragment.KEY_STORE_NAME);
     }
@@ -157,7 +157,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
 
         KeyStore keyStore = KeyStore.getInstance(KEY_STORE_NAME);
         keyStore.load(null);
-        PublicKey publicKey = keyStore.getCertificate(PUBLIC_KEY_NAME).getPublicKey();
+        PublicKey publicKey = keyStore.getCertificate(KEY_ALIAS).getPublicKey();
         KeyFactory factory = KeyFactory.getInstance(publicKey.getAlgorithm());
         X509EncodedKeySpec spec = new X509EncodedKeySpec(publicKey.getEncoded());
         PublicKey verificationKey = factory.generatePublic(spec);

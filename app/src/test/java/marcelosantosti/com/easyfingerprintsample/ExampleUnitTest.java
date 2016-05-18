@@ -1,4 +1,4 @@
-package marcelosantosti.com.fingerprintserverintegrationsample;
+package marcelosantosti.com.easyfingerprintsample;
 
 import org.junit.Test;
 
