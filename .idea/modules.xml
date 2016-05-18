@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FingerprintServerIntegrationSample.iml" filepath="$PROJECT_DIR$/FingerprintServerIntegrationSample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EasyFingerprint.iml" filepath="$PROJECT_DIR$/EasyFingerprint.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/fingerprintdialog/fingerprintdialog.iml" filepath="$PROJECT_DIR$/fingerprintdialog/fingerprintdialog.iml" />
     </modules>
