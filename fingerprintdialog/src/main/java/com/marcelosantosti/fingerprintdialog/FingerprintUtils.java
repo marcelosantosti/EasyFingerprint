@@ -6,6 +6,8 @@ import android.util.Base64;
 
 import com.jgabrielfreitas.datacontroller.DataController;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
@@ -13,10 +15,12 @@ import java.security.SignatureException;
 /**
  * Created by mlsantos on 12/05/2016.
  */
-public class FingerprintUtils {
+class FingerprintUtils {
 
     private static final String FINGERPRINT_KEY = "fingerprint";
     private static final String FINGERPRINT_PUBLIC_KEY = "fingerprintPublicKey";
+
+    private static PublicKey publicKey;
 
     public static byte[] getSignBytes(Signature signature) throws SignatureException {
 
@@ -33,6 +37,8 @@ public class FingerprintUtils {
         String encodedBytes = Base64.encodeToString(signature.getEncoded(), Base64.DEFAULT);
 
         new DataController(context).writeData(FINGERPRINT_PUBLIC_KEY, encodedBytes);
+
+        publicKey = signature;
     }
 
     public static void saveFingerprintPublicKey(Signature signature, Context context) throws SignatureException {
@@ -52,6 +58,28 @@ public class FingerprintUtils {
         String savedSignature = getFingerprintPublicKey(context);
 
         return encodedBytes.equals(savedSignature);
+    }
+
+    public static boolean validateFingerprintPublicKey(Signature signature) {
+
+        boolean isValid = false;
+
+        try {
+
+            Signature verificationFunction = Signature.getInstance("SHA256withECDSA");
+            verificationFunction.initVerify(publicKey);
+
+            byte[] bytes = signature.sign();
+
+            verificationFunction.update(bytes);
+
+            if (verificationFunction.verify(bytes))
+                isValid = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return isValid;
     }
 
     public static boolean validateFingerprintPublicKey(PublicKey publicKey, Context context) throws SignatureException {

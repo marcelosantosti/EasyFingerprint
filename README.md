@@ -6,7 +6,7 @@ This library is an easy implementation of the fingerprint API introduced in Andr
 
 There is a library release published in GitHub using **.aar** file created by Android Studio when compiling an Android Module. To publish the .aar to the world, Jitpack.IO was used poiting to the GitHub release and the library is available to be used on Gradle and Maven build system as dependencies. Because of that, you have to import the jitpack.io in your Gradle and add dependency to EasyFingerprint, as exemplified below:
 
-** include example of Gradle dependency **
+**include example of Gradle dependency**
 
 In your code, instantiate FingerprintDialog using the static method **newInstance** passing the callback function to receive the **onAuthenticated** and **onFailure** events. In the **onAuthenticated** callback, you will receive a parameter called **publicKey** which you can store and associate in some way with an user, validate if the fingerprint is valid and if it corresponds with the previous fingerprint recognized. This type of verification can be done localy or the public key can be transmited to a server to be validated. Example of usage:
 

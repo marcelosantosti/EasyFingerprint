@@ -10,36 +10,10 @@
     tools:context="marcelosantosti.com.easyfingerprintsample.MainActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Usuário" />
-
-    <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Password" />
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    
-    <Button
-        android:id="@+id/buttonAddFingerprint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cadastrar"/>
-
     <Button
         android:id="@+id/buttonValidateFingerprint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Validar"/>
+        android:text="@string/validate"/>
 
 </LinearLayout>

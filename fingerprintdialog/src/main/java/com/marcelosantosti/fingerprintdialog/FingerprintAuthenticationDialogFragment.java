@@ -128,7 +128,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
             Signature signature = result.getCryptoObject().getSignature();
 
             if (fingerprintCallback != null)
-                fingerprintCallback.onAuthenticated(signature, getPublicKey());
+                fingerprintCallback.onAuthenticated(signature);
 
             dismiss();
         } catch (Exception e) {
@@ -153,17 +153,17 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
         return true;
     }
 
-    private PublicKey getPublicKey() throws Exception {
-
-        KeyStore keyStore = KeyStore.getInstance(KEY_STORE_NAME);
-        keyStore.load(null);
-        PublicKey publicKey = keyStore.getCertificate(KEY_ALIAS).getPublicKey();
-        KeyFactory factory = KeyFactory.getInstance(publicKey.getAlgorithm());
-        X509EncodedKeySpec spec = new X509EncodedKeySpec(publicKey.getEncoded());
-        PublicKey verificationKey = factory.generatePublic(spec);
-
-        return verificationKey;
-    }
+//    private PublicKey getPublicKey() throws Exception {
+//
+//        KeyStore keyStore = KeyStore.getInstance(KEY_STORE_NAME);
+//        keyStore.load(null);
+//        PublicKey publicKey = keyStore.getCertificate(KEY_ALIAS).getPublicKey();
+//        KeyFactory factory = KeyFactory.getInstance(publicKey.getAlgorithm());
+//        X509EncodedKeySpec spec = new X509EncodedKeySpec(publicKey.getEncoded());
+//        PublicKey verificationKey = factory.generatePublic(spec);
+//
+//        return verificationKey;
+//    }
 
     public FingerprintCallback getFingerprintCallback() {
         return fingerprintCallback;

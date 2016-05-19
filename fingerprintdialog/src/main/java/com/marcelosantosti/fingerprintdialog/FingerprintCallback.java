@@ -8,6 +8,6 @@ import java.security.Signature;
  */
 public interface FingerprintCallback {
 
-    void onAuthenticated(Signature signature, PublicKey publicKey);
+    void onAuthenticated(Signature signature);
     void onError(Integer errorCode, String errorMessage);
 }
