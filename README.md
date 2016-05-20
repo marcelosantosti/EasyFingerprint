@@ -65,3 +65,4 @@ There are some improvements which I would like to develop, listed below:
 4. Encapsulate Samsung Fingerprint API in the library to permit the developer to use in Samsung devices with Samsung fingerprint hardwares and with Inprint API published by Google natively in Android. This abstration would permit developers to use both API's without concerning about spefics rules from one or another.
 5. Localize string to be used in other languages.
 6. Refactor instantiation of FingerprintDialog to use **newInstance** method adopted by Android when instantiating a new Fragment.
+7. Include method **hasFingerprintEnrolled** in a Utility class in the library.
