@@ -21,7 +21,7 @@ allprojects {
 compile 'com.github.marcelosantosti:EasyFingerprint:0.1.0'
 ```
 
-In your code, instantiate FingerprintDialog and set the callback function **setFingerprintCallback** to receive the **onAuthenticated** and **onFailure** events on class **FingerprintAuthenticationDialogFragment**. In the **onAuthenticated** callback. Example of usage:
+In your code, instantiate FingerprintDialog and set the callback function **setFingerprintCallback** to receive the **onAuthenticated** and **onFailure** events on class **FingerprintAuthenticationDialogFragment**. Example of usage:
 ```
 if (FingerprintManagerCompat.from(this).hasEnrolledFingerprints()) {
 
