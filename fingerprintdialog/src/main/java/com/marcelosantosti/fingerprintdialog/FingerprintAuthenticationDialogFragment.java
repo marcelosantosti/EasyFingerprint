@@ -1,11 +1,14 @@
 package com.marcelosantosti.fingerprintdialog;
 
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
 import android.support.v4.os.CancellationSignal;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +52,14 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
         setRetainInstance(true);
         setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog);
 
-        initFingerprint();
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+
+                initFingerprint();
+            }
+        });
     }
 
     @Override
@@ -84,7 +94,10 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment {
                 public void onAuthenticationError(int errMsgId, CharSequence errString) {
                     super.onAuthenticationError(errMsgId, errString);
 
-                    sendFingerprintCallbackError(errMsgId, errString.toString());
+                    Log.e("FingerprintDialog", errMsgId + " - " + errString);
+
+                    if (errMsgId != FingerprintManager.FINGERPRINT_ERROR_CANCELED)
+                        sendFingerprintCallbackError(errMsgId, errString.toString());
                 }
 
                 @Override
