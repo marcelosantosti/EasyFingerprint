@@ -3,6 +3,6 @@
 
     <string name="register_at_least_one_fingerprint">Registre pelo o menos uma digital no menu Segurança -> Digital</string>
     <string name="user_authenticated">Usuário autenticado</string>
-    <string name="user_not_authenticated">Usuário autenticado</string>
+    <string name="user_not_authenticated">Usuário não autenticado</string>
     <string name="validate">Validar</string>
 </resources>
