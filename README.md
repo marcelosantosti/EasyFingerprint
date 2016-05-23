@@ -18,7 +18,7 @@ allprojects {
 
 **module.gradle or application.gradle**
 ```
-compile 'com.github.marcelosantosti:EasyFingerprint:0.1.0'
+compile 'com.github.marcelosantosti:EasyFingerprint:0.2.0'
 ```
 
 In your code, instantiate FingerprintDialog and set the callback function **setFingerprintCallback** to receive the **onAuthenticated** and **onFailure** events on class **FingerprintAuthenticationDialogFragment**. Example of usage:
